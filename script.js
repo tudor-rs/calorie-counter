@@ -1,23 +1,35 @@
 const header = document.querySelector('.header');
 const body = document.querySelector('.body');
-const messageBox = document.querySelector('.message-box');
+const footer = document.querySelector('.footer');
+
+const messageBox = document.createElement('div');
+messageBox.classList.add('message-box');
+
 const counter = document.createElement('input');
+counter.classList.add('counter');
 counter.type = 'number';
 counter.inputMode = 'numeric';
-counter.id = 'counter';
-body.appendChild(counter);
-const footer = document.querySelector('.footer');
-const buttonAdd = document.querySelector('#button-add');
-const buttonBack = document.createElement('div');
-buttonBack.classList.add('button');
-buttonBack.id = 'button-back';
-buttonBack.innerText = 'X';
+
+const addButton = document.createElement('div');
+addButton.classList.add('button', 'add-button');
+addButton.innerText = '+';
+
+const backButton = document.createElement('div');
+backButton.classList.add('button', 'back-button');
+backButton.innerText = 'X';
+
+const addCaloriesInput = document.createElement('input');
+addCaloriesInput.classList.add('add-calories-input');
+addCaloriesInput.type = 'number';
+addCaloriesInput.inputMode = 'numeric';
+
 
 let currentCalories = 0;
-let lastAccessed;
+let lastAccessed = null;
 
 const d = new Date();
 const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
+
 
 // check if the app has been accessed before
 
@@ -30,7 +42,7 @@ else {
     localStorage.setItem('lastAccessed', lastAccessed);
 }
 
-// check if there already is a stored number for current day
+// check if there is anything in storage
 
 if (lastAccessed == date) {
     if (localStorage.getItem("calories")) {
@@ -46,8 +58,33 @@ else {
     currentCalories = 0;
 }
 
-header.innerText = date;
-counter.value = currentCalories;
+function showMainScreen() {
+    header.innerText = date;
+    messageBox.innerText = '';
+    body.appendChild(messageBox);
+    counter.value = currentCalories;
+    body.appendChild(counter);
+    footer.appendChild(addButton);
+}
+
+function showAddCaloriesScreen() {
+    messageBox.innerText = 'Calories to add:';
+    body.appendChild(messageBox);
+    addCaloriesInput.value = '';
+    body.appendChild(addCaloriesInput);
+    addCaloriesInput.focus();
+    footer.appendChild(backButton);
+}
+
+function clearScreen() {
+    while (body.lastChild) {
+        body.removeChild(body.lastChild);
+    }
+
+    while (footer.lastChild) {
+        footer.removeChild(footer.lastChild);
+    }
+}
 
 // edit functionality
 
@@ -63,48 +100,33 @@ counter.addEventListener('change', () => {
 
 // add functionality
 
-buttonAdd.addEventListener('click', () => {
-    body.removeChild(counter);
-    const addCalories = document.createElement('input');
-    addCalories.type = 'number';
-    addCalories.inputMode = 'numeric';
-    addCalories.id = 'addCalories';
-    body.appendChild(addCalories);
-    messageBox.innerText = 'Calories to add:';
-    footer.removeChild(buttonAdd);
-    footer.appendChild(buttonBack);
-    addCalories.focus();
+addButton.addEventListener('click', () => {
+    clearScreen();
+    showAddCaloriesScreen();
+});
 
-    addCalories.addEventListener('change', () => {
-        currentCalories = currentCalories + parseFloat(addCalories.value);
-        body.removeChild(addCalories);
-        footer.removeChild(buttonBack);
-        footer.appendChild(buttonAdd);
-        messageBox.innerText = '';
-        counter.value = currentCalories;
-        body.appendChild(counter);
-        localStorage.setItem("calories", currentCalories);
+addCaloriesInput.addEventListener('change', () => {
+    currentCalories = currentCalories + parseFloat(addCaloriesInput.value);
+    localStorage.setItem("calories", currentCalories);
+    counter.value = currentCalories;
 
-        if (currentCalories >= 50000) {
-            alert('This has to be unhealthy...');
-        }
-    })
+    if (currentCalories >= 50000) {
+        alert('This has to be unhealthy...');
+    }
+
+    clearScreen();
+    showMainScreen();
 });
 
 // return functionality
 
-buttonBack.addEventListener('click', () => {
-    while (body.lastChild) {
-        body.removeChild(body.lastChild);
-    }
-    footer.removeChild(buttonBack);
-    body.appendChild(messageBox);
-    body.appendChild(counter);
-    footer.appendChild(buttonAdd);
-
-    messageBox.innerText = '';
+backButton.addEventListener('click', () => {
+    clearScreen();
+    showMainScreen();
 });
 
-// clean up code
+showMainScreen();
+
 // add calorie goal function
+// add progress bar relative to calorie goal
 // add hold functionality instead of click on circle?

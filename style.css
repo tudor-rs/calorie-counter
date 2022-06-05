@@ -13,7 +13,7 @@ html, body {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    font-size: 6vw;
+    font-size: 3vh;
     color: white;
     background-color: rgb(0, 140, 255);
 }
@@ -47,7 +47,7 @@ input:focus {
     background-color: rgb(224, 240, 255);
 }
 
-#counter, #addCalories {
+.counter, .add-calories-input {
     width: 45vw;
     height: 45vw;
     margin-top: 5vw;
@@ -76,20 +76,20 @@ input:focus {
     color: white;
 }
 
-#button-add {
+.add-button {
     background-color: rgb(0, 140, 255);
 }
 
-#button-add:active {
+.add-button:active {
     background-color: rgb(128, 193, 255);
 }
 
-#button-back {
+.back-button {
     font-size: 3vw;
     background-color: rgb(201, 0, 0);
 }
 
-#button-back:active {
+.back-button:active {
     background-color: rgb(255, 155, 155);
 }
 
@@ -103,4 +103,8 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+.header, .body, .footer {
+    border: solid black 1px;
 }
