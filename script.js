@@ -105,5 +105,6 @@ buttonBack.addEventListener('click', () => {
     messageBox.innerText = '';
 });
 
-
+// clean up code
+// add calorie goal function
 // add hold functionality instead of click on circle?
