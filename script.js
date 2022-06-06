@@ -2,6 +2,14 @@ const header = document.querySelector('.header');
 const body = document.querySelector('.body');
 const footer = document.querySelector('.footer');
 
+const dateBox = document.createElement('div');
+dateBox.classList.add('date-box');
+
+const targetCaloriesBox = document.createElement('input');
+targetCaloriesBox.classList.add('target-calories-box');
+targetCaloriesBox.type = 'number';
+targetCaloriesBox.inputMode = 'numeric';
+
 const messageBox = document.createElement('div');
 messageBox.classList.add('message-box');
 
@@ -25,10 +33,16 @@ addCaloriesInput.inputMode = 'numeric';
 
 
 let currentCalories = 0;
+let targetCalories = () => {
+    if (localStorage.getItem('targetCalories')) {
+        targetCalories = localStorage.getItem('targetCalories');
+    }
+};
 let lastAccessed = null;
 
 const d = new Date();
-const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
+// const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
+const date = '7-6-2022';
 
 
 // check if the app has been accessed before
@@ -45,21 +59,34 @@ else {
 // check if there is anything in storage
 
 if (lastAccessed == date) {
-    if (localStorage.getItem("calories")) {
-        currentCalories = parseFloat(localStorage.getItem("calories"));
+    if (localStorage.getItem("currentCalories")) {
+        currentCalories = parseFloat(localStorage.getItem("currentCalories"));
     }
 
     else {
         currentCalories = 0;
     }
+
+    if (localStorage.getItem('targetCalories')) {
+        targetCalories = parseFloat(localStorage.getItem('targetCalories'));
+    }
+
+    else {
+        targetCalories = 0;
+    }
 }
 
 else {
     currentCalories = 0;
+    localStorage.setItem('lastAccessed', date);
+    localStorage.setItem('currentCalories', currentCalories);
 }
 
 function showMainScreen() {
-    header.innerText = date;
+    dateBox.innerText = date;
+    targetCaloriesBox.value = targetCalories;
+    header.appendChild(dateBox);
+    header.appendChild(targetCaloriesBox);
     messageBox.innerText = '';
     body.appendChild(messageBox);
     counter.value = currentCalories;
@@ -86,6 +113,12 @@ function clearScreen() {
     }
 }
 
+targetCaloriesBox.addEventListener('change', () => {
+    targetCalories = parseFloat(targetCaloriesBox.value);
+    localStorage.setItem('targetCalories', targetCalories);
+    targetCaloriesBox.value = targetCalories;
+});
+
 // edit functionality
 
 counter.addEventListener('change', () => {
@@ -95,7 +128,7 @@ counter.addEventListener('change', () => {
         alert('That is a lot of calories!');
     }
 
-    localStorage.setItem("calories", currentCalories);
+    localStorage.setItem("currentCalories", currentCalories);
 });
 
 // add functionality
@@ -107,7 +140,7 @@ addButton.addEventListener('click', () => {
 
 addCaloriesInput.addEventListener('change', () => {
     currentCalories = currentCalories + parseFloat(addCaloriesInput.value);
-    localStorage.setItem("calories", currentCalories);
+    localStorage.setItem("currentCalories", currentCalories);
     counter.value = currentCalories;
 
     if (currentCalories >= 50000) {
@@ -127,6 +160,5 @@ backButton.addEventListener('click', () => {
 
 showMainScreen();
 
-// add calorie goal function
 // add progress bar relative to calorie goal
 // add hold functionality instead of click on circle?
