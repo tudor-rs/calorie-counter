@@ -74,8 +74,8 @@ input:focus {
 }
 
 .button {
-    width: 12vw;
-    height: 12vw;
+    width: 15vw;
+    height: 15vw;
     border-radius: 50%;
     display: flex;
     flex: 0 0 auto;
@@ -102,7 +102,9 @@ input:focus {
     background-color: rgb(255, 155, 155);
 }
 
+/* This hides up/down arrows from input fields */
 /* Chrome, Safari, Edge, Opera */
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -110,10 +112,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
+
 input[type=number] {
     -moz-appearance: textfield;
-}
-
-.header, .body, .footer {
-    border: solid black 1px;
 }
